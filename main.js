@@ -24,7 +24,7 @@ let wordArray = [];
 let chunkArray = [];
 let chunkSize = 16;
 let wpm = 500;
-let delay = 500;
+let delay = 325;
 let state = "stopped";
 let s = 0;
 let i = 0;
@@ -122,7 +122,7 @@ const Action = {
     },
 
     faster() {
-        if (wpm <= 2000) {
+        if (wpm < 2000) {
             wpm += 20;
             calcDelay();
             document.getElementById('speed').innerHTML = wpm;
