@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="#">
+    <script async src="main.js"></script>
+</head>
+<body>
+    <header>
+        <div class="title">
+            <h2>Speed Reader</h2>
+        </div>
+            <p>Speed: <i id="speed">500</i> WPM</p>
+            <p>Size: <i id="size">16</i> Characters</p>
+        <div class="options">
+            <button type="button" id="hide-controls">Hide Controls</button>
+            <button type="button" id="hide-text">Hide Text</button>
+        </div>
+    </header>
+    <main>
+        <div id="display-area">
+            <div class="display-text">
+                <h1 id="text-1">How</h1>
+            </div>
+            <div class="display-text">
+                <h1 id="text-2">Fast</h1>
+            </div>
+            <div id="display-box">
+                <h1 id="text-3">Can</h1>
+            </div>
+            <div class="display-text">
+                <h1 id="text-4">You</h1>
+            </div>
+            <div class="display-text">
+                <h1 id="text-5">Read?</h1>
+            </div>
+        </div>
+        <div id="controls-area">
+            <div class="control">
+                <button type="button" id="blink">CTRL</button>
+                <p>Blink</p>
+            </div>
+            <div class="control">
+                <button type="button" id="last">A</button>
+                <p>Last</p>
+            </div>
+            <div class="control">
+                <button type="button" id="skip">S</button>
+                <p>Skip</p>
+            </div>
+            <div class="control">
+                <button type="button" id="back">Z</button>
+                <p>Back</p>
+            </div>
+            <div class="control">
+                <button type="button" id="forwards">X</button>
+                <p>Forwards</p>
+            </div>
+            <div class="control">
+                <button type="button" id="start-stop">SPACE</button>
+                <p>Start | Stop</p>
+            </div>
+            <div class="control">
+                <button type="button" id="faster">&#8593</button>
+                <p>Faster</p>
+            </div>
+            <div class="control">
+                <button type="button" id="slower">&#8595</button>
+                <p>Slower</p>
+            </div>
+            <div class="control">
+                <button type="button" id="smaller">&#8592</button>
+                <p>Smaller</p>
+            </div>
+            <div class="control">
+                <button type="button" id="bigger">&#8594</button>
+                <p>Bigger</p>
+            </div>
+            <div class="control">
+                <button type="button" id="parse">Enter</button>
+                <p>Parse</p>
+            </div>
+        </div>
+        <div id="text-area">
+            <textarea id="input-text" placeholder="Insert Text Here">Copy and paste text here, then click anywhere outside the text box. Press Enter to parse the text and load it into the display, then pres play to start. Use the keyboard arrows to adjust the speed and chunk size, use A, S, Z, and X to back up or skip forward. Press or hold Control to temporarily pause the stream. Not all buttons work yet, but keyboard controls do.</textarea>
+        </div>
+    </main>
+</body>
+</html>
