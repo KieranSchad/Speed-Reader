@@ -217,11 +217,11 @@ const Action = {
             textHidden = true;
         } else if (textHidden == true && controlsHidden == false) {
             document.getElementById('text-area').removeAttribute("style");
-            document.getElementById('display-area').style.height=("calc(60vh - 150px)");
+            document.getElementById('display-area').style.height=("calc(60vh - 100px)");
             textHidden = false;
         } else {
             document.getElementById('text-area').removeAttribute("style");
-            document.getElementById('display-area').style.height=("calc(60vh - 50px)");
+            document.getElementById('display-area').style.height=("calc(60vh)");
             textHidden = false;
         }
     },
