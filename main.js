@@ -170,6 +170,7 @@ const Action = {
     },
 
     parse() {
+        Action.pause();
         getText();
         s = 0;
         i = 0;
@@ -259,7 +260,8 @@ const keyAction = {
     ArrowUp: { keydown: Action.faster },
     ArrowDown: { keydown: Action.slower },
     ArrowLeft: { keydown: Action.smaller },
-    ArrowRight: { keydown: Action.bigger }
+    ArrowRight: { keydown: Action.bigger },
+    Enter: { keydown: Action.parse }
 }
 
 // KeyHandler - maps keyup/down events to functions
