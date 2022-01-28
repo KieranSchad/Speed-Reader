@@ -5,12 +5,14 @@
 }
 
 html {
+    overflow-x: hidden;
     background: rgb(3,51,94);
-background: linear-gradient(90deg, rgba(3,51,94,1) 0%, rgba(19,109,114,1) 50%, rgba(3,51,94,1) 100%);
+    background: linear-gradient(90deg, rgba(3,51,94,1) 0%, rgba(19,109,114,1) 50%, rgba(3,51,94,1) 100%);
 }
 
 body{
-    width: 80%;
+    overflow-x: hidden;
+    width: calc(540px + 25%);
     max-width: 1200px;
     height: 100vh;
     margin: auto;
@@ -29,7 +31,8 @@ header {
 
 h1 {
     font-family: 'Times New Roman', Times, serif;
-    font-size: 5vh;
+    font-size: 6vh;
+    white-space: nowrap;
 }
 
 h2 {
@@ -48,6 +51,7 @@ button {
     border: solid #222 3px;
     border-radius: 5px;
     background-color: rgba(255, 255, 255, 0.4);
+    margin: 2px;
 }
 
 button:hover {
@@ -67,7 +71,7 @@ header button {
     justify-content: space-around;
     width: 100%;
     text-align: center;
-    padding: 2vh;
+    padding: 2vh 0;
     /* background-color: rgba(255, 255, 255, 0.2); */
 }
 
@@ -75,15 +79,18 @@ header button {
     background-color: rgba(255, 255, 255, 0.5);
     width: calc(40vh + 16vw);
     margin: .5vh auto .5vh auto;
-    height: 6vw;
+    flex: 1.5 1 0px;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
 .display-text {
-    height: 5vh;
-    color: rgba(0, 0, 0, 0.2);
+    flex: 0.875 1 0px;
+    color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 #controls-area {
@@ -92,7 +99,7 @@ header button {
     display: flex;
     justify-content: space-around;
     background-color: rgba(255, 255, 255, 0.5);
-    padding: 15px;
+    padding: 10px 0;
 }
 
 #controls-area p {
@@ -101,11 +108,11 @@ header button {
 }
 
 #controls-area button {
-    width: 5vw;
-    height: 50px;
+    width: 60px;
+    height: 60px;
 }
 
-#start-stop {
+#controls-area #start-stop {
     width: 10vw;
 }
 
@@ -120,4 +127,70 @@ header button {
     padding: 15px;
     background-color: rgba(255, 255, 255, 0.6);
     resize: none;
+}
+
+@media all and (max-width: 720px) {
+
+body {
+    width: 100%;
+
+}
+
+h1 {
+    font-size: calc(4vw + 14px);
+}
+
+.title,
+.options,
+.control p,
+.blink,
+.last,
+.skip {
+    display: none;
+}
+
+header {
+    justify-content: space-around;
+}
+
+#display-box {
+    max-width: 100%;
+}
+
+#controls-area {
+    flex-wrap: wrap;
+    height: 100px;
+    padding: 7px 0;
+}
+
+#controls-area button {
+    width: 23vw;
+    height: 40px;
+}
+
+#controls-area #start-stop {
+    width: 23vw;
+}
+
+#controls-area div {
+    order: 4;
+}
+
+#controls-area .back {
+    order: 1;
+}
+
+#controls-area .forwards {
+    order: 2;
+}
+
+#controls-area .parse {
+    order: 3;
+}
+
+#text-area {
+    height: calc(40vh - 50px);
+}
+
+
 }

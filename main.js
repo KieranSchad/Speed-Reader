@@ -6,10 +6,18 @@ const display2 = document.getElementById('text-2');
 const display3 = document.getElementById('text-3');
 const display4 = document.getElementById('text-4');
 const display5 = document.getElementById('text-5');
-const startStop = document.getElementById('start-stop');
-const parseText = document.getElementById('parse');
 const hideTextButton = document.getElementById('hide-text');
 const hideControlsButton = document.getElementById('hide-controls');
+const backButton = document.getElementById('back');
+const forwardsButton = document.getElementById('forwards');
+const parseButton = document.getElementById('parse');
+const startStopButton = document.getElementById('start-stop');
+const fasterButton = document.getElementById('faster');
+const slowerButton = document.getElementById('slower');
+const smallerButton = document.getElementById('smaller');
+const biggerButton = document.getElementById('bigger');
+let textHidden = false;
+let controlsHidden = false;
 let intervalHandle = null;
 let textArray = [];
 let wordArray = [];
@@ -29,13 +37,19 @@ const Action = {
             intervalHandle = setInterval(Action.output, delay);
         }
         state = "running";
-        console.log(state);
+        document.getElementById('text-1').style.color="rgba(0, 0, 0, 0.03)";
+        document.getElementById('text-2').style.color="rgba(0, 0, 0, 0.05)";
+        document.getElementById('text-4').style.color="rgba(0, 0, 0, 0.05)";
+        document.getElementById('text-5').style.color="rgba(0, 0, 0, 0.03)";
     },
 
     pause() {
         clearInterval(intervalHandle);
         state = "paused";
-        console.log(state);
+        document.getElementById('text-1').removeAttribute("style");
+        document.getElementById('text-2').removeAttribute("style");
+        document.getElementById('text-4').removeAttribute("style");
+        document.getElementById('text-5').removeAttribute("style");
     },
 
     blink() {
@@ -57,7 +71,6 @@ const Action = {
             s--;
             i = 0;
             Action.start();
-            console.log("last");
         }
     },
 
@@ -66,19 +79,19 @@ const Action = {
             s++;
             i = 0;
             Action.start();
-            console.log("skip");
         }
     },
 
     back() {
-        state = "backwards"
+        state = "backwards";
+        document.getElementById('text-1').removeAttribute("style");
+        document.getElementById('text-2').removeAttribute("style");
+        document.getElementById('text-4').removeAttribute("style");
+        document.getElementById('text-5').removeAttribute("style");
     },
 
     forwards() {
-        // Action.pause();
-        // i = i + 5;
-        // Action.output();
-        // console.log("forwards 5");
+        i++;
     },
 
     toggleStartStop() {
@@ -105,7 +118,6 @@ const Action = {
             if (state == "running") {
                 intervalHandle = setInterval(Action.output, delay);
             }
-            console.log(delay);
         }
     },
 
@@ -118,7 +130,6 @@ const Action = {
             if (state == "running") {
                 intervalHandle = setInterval(Action.output, delay);
             }
-            console.log(delay);
         }
     },
 
@@ -133,8 +144,10 @@ const Action = {
             clearInterval(intervalHandle);
             if (state == "running") {
                 intervalHandle = setInterval(Action.output, delay);
+            } else {
+                Action.output();
+                i--;
             }
-            console.log(chunkSize);
         }
     },
 
@@ -149,16 +162,32 @@ const Action = {
             clearInterval(intervalHandle);
             if (state == "running") {
                 intervalHandle = setInterval(Action.output, delay);
+            } else {
+                Action.output();
+                i--;
             }
-            console.log(chunkSize);
         }
     },
 
+    parse() {
+        getText();
+        s = 0;
+        i = 0;
+        Action.output();
+    },
+
     output() {
-        console.log("state");
+        console.log(s + ", " + i);
+        console.log(delay + "ms");
+        console.log(wpm + "wpm");
         if (s < chunkArray.length) {
             if (state == "backwards") {
-                i -= 2;
+                if (i <= 0 && s > 0) {
+                    s--;
+                    i = chunkArray[s].length - 2;
+                } else {
+                    i -= 2;
+                }
             }
             display1.textContent = chunkArray[s][i-2];
             display2.textContent = chunkArray[s][i-1];
@@ -177,23 +206,55 @@ const Action = {
         }
     },
 
-    hideText() {
-        document.getElementById('text-area').style.display=("none");
-        document.getElementById('display-area').style.height=("calc(100vh - 150px)");
+    toggleText() {
+        if (textHidden == false && controlsHidden == false) {
+            document.getElementById('text-area').style.display=("none");
+            document.getElementById('display-area').style.height=("calc(100vh - 150px)");
+            textHidden = true;
+        } else if (textHidden == false && controlsHidden == true) {
+            document.getElementById('text-area').style.display=("none");
+            document.getElementById('display-area').style.height=("calc(100vh - 50px)");
+            textHidden = true;
+        } else if (textHidden == true && controlsHidden == false) {
+            document.getElementById('text-area').removeAttribute("style");
+            document.getElementById('display-area').style.height=("calc(60vh - 150px)");
+            textHidden = false;
+        } else {
+            document.getElementById('text-area').removeAttribute("style");
+            document.getElementById('display-area').style.height=("calc(60vh - 50px)");
+            textHidden = false;
+        }
     },
 
-    hideControls() {
-        document.getElementById('controls-area').style.display=("none");
-        document.getElementById('display-area').style.height=("calc(100vh - 50px)");
+    toggleControls() {
+        if (controlsHidden == false && textHidden == false) {
+            document.getElementById('controls-area').style.display=("none");
+            document.getElementById('display-area').style.height=("calc(60vh)");
+            controlsHidden = true;
+        } else if (controlsHidden == false && textHidden == true) {
+            document.getElementById('controls-area').style.display=("none");
+            document.getElementById('display-area').style.height=("calc(100vh - 50px)");
+            controlsHidden = true;
+        } else if (controlsHidden == true && textHidden == false) {
+            document.getElementById('controls-area').removeAttribute("style");
+            document.getElementById('display-area').style.height=("calc(60vh - 100px)");
+            controlsHidden = false;
+        } else {
+            document.getElementById('controls-area').removeAttribute("style");
+            document.getElementById('display-area').style.height=("calc(100vh - 150px)");
+            controlsHidden = false;
+        }
     }
 }
+
+// Object literal list of keys and functions to apply to them
 
 const keyAction = {
     Control: { keydown: Action.blink, keyup: Action.unblink },
     a: { keydown: Action.last },
     s: { keydown: Action.skip },
     z: { keydown: Action.back, keyup: Action.start },
-    x: { keydown: Action.forwards, keyup: Action.start },
+    x: { keydown: Action.forwards },
     " ": { keydown: Action.toggleStartStop },
     ArrowUp: { keydown: Action.faster },
     ArrowDown: { keydown: Action.slower },
@@ -201,8 +262,10 @@ const keyAction = {
     ArrowRight: { keydown: Action.bigger }
 }
 
+// KeyHandler - maps keyup/down events to functions
+
 const keyHandler = (ev) => {
-    if (ev.repeat) return;                             
+    // if (ev.repeat) return;        // disables hold down                     
     if (!(ev.key in keyAction) || !(ev.type in keyAction[ev.key])) return;
     keyAction[ev.key][ev.type]();
   };
@@ -210,6 +273,8 @@ const keyHandler = (ev) => {
   ['keydown', 'keyup'].forEach((evType) => {
     document.body.addEventListener(evType, keyHandler);
   });
+
+// Parse text from input and split into sentences and chunks depending on chunk size
 
 function getText() {
     sentenceArray =  textInput.value.match(/[^\.\!\?]*[\.\!\?]/ig);
@@ -229,25 +294,40 @@ function getText() {
     }
 }
 
+// calculate delay interval using given wpm and number of words and chunks depending on chunk size
+
 function calcDelay() {
     getText();
     let wordCount = textInput.value.match(/\S+/ig).length;
-    console.log(wordCount + " words");
     let chunkCount = 0;
     for (let m = 0; m  < chunkArray.length; m++) {
         chunkCount += chunkArray[m].length;
     }
-    console.log(chunkCount + " chunks");
     let totalSeconds = wordCount / wpm * 60;
-    console.log(totalSeconds + " seconds");
     delay = totalSeconds / chunkCount * 1000;
-    console.log("Delay " + delay)
 }
 
-// textInput.addEventListener('keyup', getText);
-document.addEventListener("DOMContentLoaded", getText);
-hideControlsButton.addEventListener('click', Action.hideControls);
-hideTextButton.addEventListener('click', Action.hideText);
-parseText.addEventListener('click', getText);
-startStop.addEventListener('click', Action.toggleStartStop);
-// window.addEventListener('keyup', toggleStartStop);
+// Remove focus from all buttons 
+
+document.querySelectorAll("button").forEach( function(item) {
+    item.addEventListener('focus', function() {
+        this.blur();
+    })
+})
+
+// Event listeners
+
+hideControlsButton.addEventListener('click', Action.toggleControls);
+hideTextButton.addEventListener('click', Action.toggleText);
+backButton.addEventListener('mousedown', Action.back);
+backButton.addEventListener('mouseup', Action.start);
+forwardsButton.addEventListener('mousedown', Action.forwards);
+parseButton.addEventListener('click', Action.parse);
+startStopButton.addEventListener('click', Action.toggleStartStop);
+fasterButton.addEventListener('click', Action.faster);
+slowerButton.addEventListener('click', Action.slower);
+smallerButton.addEventListener('click', Action.smaller);
+biggerButton.addEventListener('click', Action.bigger);
+
+
+
