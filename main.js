@@ -348,7 +348,39 @@ const Action = {
         document.getElementById('text-3').style.fontSize = h1Size;
         document.getElementById('text-4').style.fontSize = h1Size;
         document.getElementById('text-5').style.fontSize = h1Size;
+    },
+
+    color0() {
+        document.getElementById('html').removeAttribute("style");
+    },
+    color1() {
+        document.getElementById('html').style.background = ("linear-gradient(90deg, rgba(65,20,0,1) 0%, rgba(189,59,1,1) 50%, rgba(65,20,0,1) 100%)");
+    },
+    color2() {
+        document.getElementById('html').style.background = ("linear-gradient(90deg, rgba(75,57,0,1) 0%, rgba(189,143,1,1) 50%, rgba(75,57,0,1) 100%)");
+    },
+    color3() {
+        document.getElementById('html').style.background = ("linear-gradient(90deg, rgba(134,127,110,1) 0%, rgba(186,177,155,1) 50%, rgba(134,127,110,1) 100%)");
+    },
+    color4() {
+        document.getElementById('html').style.background = ("linear-gradient(90deg, rgba(110,121,134,1) 0%, rgba(160,179,202,1) 50%, rgba(110,121,134,1) 100%)");
+    },
+    color5() {
+        document.getElementById('html').style.background = ("linear-gradient(90deg, rgba(42,94,154,1) 0%, rgba(68,144,235,1) 50%, rgba(42,94,154,1) 100%)");
+    },
+    color6() {
+        document.getElementById('html').style.background = ("linear-gradient(90deg, rgba(11,40,123,1) 0%, rgba(61,100,213,1) 50%, rgba(11,40,123,1) 100%)");
+    },
+    color7() {
+        document.getElementById('html').style.background = ("linear-gradient(90deg, rgba(15,20,133,1) 0%, rgba(120,58,195,1) 50%, rgba(15,20,133,1) 100%)");
+    },
+    color8() {
+        document.getElementById('html').style.background = ("BLACK");
+    },
+    color9() {
+        document.getElementById('html').style.background = ("WHITE");
     }
+    
 }
 
 // Object literal list of keys and functions to apply to them
@@ -364,7 +396,17 @@ const keyAction = {
     ArrowDown: { keydown: Action.slower },
     ArrowLeft: { keydown: Action.smaller },
     ArrowRight: { keydown: Action.bigger },
-    Enter: { keydown: Action.parse }
+    Enter: { keydown: Action.parse },
+    1: { keydown: Action.color1 },
+    2: { keydown: Action.color2 },
+    3: { keydown: Action.color3 },
+    4: { keydown: Action.color4 },
+    5: { keydown: Action.color5 },
+    6: { keydown: Action.color6 },
+    7: { keydown: Action.color7 },
+    8: { keydown: Action.color8 },
+    9: { keydown: Action.color9 },
+    0: { keydown: Action.color0 }
 }
 
 // KeyHandler - maps keyup/down events to functions
