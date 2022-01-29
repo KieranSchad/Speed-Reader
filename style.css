@@ -75,13 +75,21 @@ header button {
     /* background-color: rgba(255, 255, 255, 0.2); */
 }
 
+.display-box-wrapper {
+    margin: .5vh auto .5vh auto;
+    flex: 1.5 1 0px;
+    width: 100%;
+    margin: 0.5vh 0;
+}
+
 #display-box {
     background-color: rgba(255, 255, 255, 0.5);
     width: calc(40vh + 16vw);
-    margin: .5vh auto .5vh auto;
-    flex: 1.5 1 0px;
+    height: 100%;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
 }
 
@@ -140,66 +148,132 @@ header button {
 
 @media all and (max-width: 720px) {
 
-body {
-    width: 100%;
+    body {
+        width: 100%;
 
+    }
+
+    h1 {
+        font-size: calc(4vw + 14px);
+    }
+
+    .title,
+    .options,
+    .control p,
+    .blink,
+    .last,
+    .skip {
+        display: none;
+    }
+
+    header {
+        justify-content: space-around;
+    }
+
+    .display-box-wrapper {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    #display-box {
+        background-color: transparent;
+    }
+
+    #controls-area {
+        flex-wrap: wrap;
+        height: 100px;
+        padding: 7px 0;
+    }
+
+    #controls-area button {
+        width: 23vw;
+        height: 40px;
+    }
+
+    #controls-area #start-stop {
+        width: 23vw;
+    }
+
+    #controls-area div {
+        order: 4;
+    }
+
+    #controls-area .back {
+        order: 1;
+    }
+
+    #controls-area .forwards {
+        order: 2;
+    }
+
+    #controls-area .parse {
+        order: 3;
+    }
+
+    #text-area {
+        height: calc(40vh - 50px);
+    }
+
+    @media all and (max-height: 500px) and (min-width: 500px) {
+
+        #controls-area button {
+            width: 10vw;
+            height: 40px;
+            padding: 0px;
+        }
+
+    }
 }
 
-h1 {
-    font-size: calc(4vw + 14px);
+
+@media all and (max-height: 500px) {
+
+    .display-text {
+        display: none;
+    }
+
+    .display-box-wrapper {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    #display-box {
+        background-color: transparent;
+    }
 }
 
-.title,
-.options,
-.control p,
-.blink,
-.last,
-.skip {
-    display: none;
-}
 
-header {
-    justify-content: space-around;
-}
+@media all and (max-height: 500px) and (min-width: 500px) {
 
-#display-box {
-    max-width: 100%;
-}
+    h1 {
+        font-size: 6vw;
+    }
 
-#controls-area {
-    flex-wrap: wrap;
-    height: 100px;
-    padding: 7px 0;
-}
+    #display-area {
+        height: calc(60vh - 50px);
+    }
 
-#controls-area button {
-    width: 23vw;
-    height: 40px;
-}
+    #controls-area {
+        flex-wrap: nowrap;
+        height: 50px;
+        padding: 2px 0;
+    }
 
-#controls-area #start-stop {
-    width: 23vw;
-}
+    #controls-area button {
+        height: 40px;
+        padding: 0px;
+    }
 
-#controls-area div {
-    order: 4;
-}
+    #controls-area #start-stop {
+        width: 80px;
+    }
 
-#controls-area .back {
-    order: 1;
-}
+    .control p {
+        display: none;
+    }
 
-#controls-area .forwards {
-    order: 2;
-}
 
-#controls-area .parse {
-    order: 3;
-}
-
-#text-area {
-    height: calc(40vh - 50px);
-}
+    #text-area {
+        height: calc(40vh - 50px);
+    }
 
 
 }

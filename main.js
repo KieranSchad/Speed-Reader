@@ -39,7 +39,6 @@ let i = 0;
 const Action = {
     start() {
         if (state != "running") {
-            Action.output();
             intervalHandle = setInterval(Action.output, delay);
         }
         state = "running";
@@ -259,9 +258,9 @@ const Action = {
     },
 
     output() {
-        console.log(s + ", " + i);
-        console.log(delay + "ms");
-        console.log(wpm + "wpm");
+        // console.log(s + ", " + i);
+        // console.log(delay + "ms");
+        // console.log(wpm + "wpm");
 
         if (s < chunkArray.length) {                  // if it's not past the end
             display1.textContent = chunkArray[s][i-2];
@@ -287,7 +286,7 @@ const Action = {
             clearInterval(intervalHandle);            // stop
             Action.brightText();
             state = "stopped";
-            console.log(state);
+            // console.log(state);
         }
     },
 
