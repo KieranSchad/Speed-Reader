@@ -205,7 +205,7 @@ const Action = {
             calcDelay();
             i = 0;
             document.getElementById('size').innerHTML = chunkSize;
-            document.getElementById('display-box').style.width=("calc(40vh + " + chunkSize + "vw)");
+            document.getElementById('display-box').style.width=("calc(40vh + " + (1.5 * chunkSize) + "vw)");
             clearInterval(intervalHandle);
             if (state == "running") {
                 intervalHandle = setInterval(Action.output, delay);
@@ -217,13 +217,13 @@ const Action = {
     },
 
     bigger() {
-        if (chunkSize < 40) {
+        if (chunkSize < 36) {
             chunkSize += 2;
             getText();
             calcDelay();
             i = 0;
             document.getElementById('size').innerHTML = chunkSize;
-            document.getElementById('display-box').style.width=("calc(40vh + " + chunkSize + "vw)");
+            document.getElementById('display-box').style.width=("calc(40vh + " + (1.5 * chunkSize) + "vw)");
             clearInterval(intervalHandle);
             if (state == "running") {
                 intervalHandle = setInterval(Action.output, delay);
@@ -294,13 +294,14 @@ const Action = {
         if (textHidden == false && controlsHidden == false) {
             document.getElementById('text-area').style.display=("none");
             document.getElementById('display-area').style.height=("calc(100vh - 150px)");
-            Action.changeFontSize("8vh");
+            document.getElementById('body').style.width=("100%");
+            Action.changeFontSize("7vh");
             textHidden = true;
             document.getElementById('hide-text').innerHTML = "Show Text";
         } else if (textHidden == false && controlsHidden == true) {
             document.getElementById('text-area').style.display=("none");
             document.getElementById('display-area').style.height=("calc(100vh - 50px)");
-            Action.changeFontSize("8vh");
+            Action.changeFontSize("7vh");
             textHidden = true;
             document.getElementById('hide-text').innerHTML = "Show Text";
         } else if (textHidden == true && controlsHidden == false) {
@@ -375,10 +376,10 @@ const Action = {
         document.getElementById('html').style.background = ("linear-gradient(90deg, rgba(15,20,133,1) 0%, rgba(120,58,195,1) 50%, rgba(15,20,133,1) 100%)");
     },
     color8() {
-        document.getElementById('html').style.background = ("BLACK");
+        document.getElementById('html').style.background = ("linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(35,35,35,1) 50%, rgba(0,0,0,1) 100%)");
     },
     color9() {
-        document.getElementById('html').style.background = ("WHITE");
+        document.getElementById('html').style.background = ("linear-gradient(90deg, rgba(209,209,209,1) 0%, rgba(233,233,233,1) 50%, rgba(209,209,209,1) 100%)");
     }
     
 }
