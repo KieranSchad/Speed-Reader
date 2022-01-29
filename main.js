@@ -8,6 +8,9 @@ const display4 = document.getElementById('text-4');
 const display5 = document.getElementById('text-5');
 const hideTextButton = document.getElementById('hide-text');
 const hideControlsButton = document.getElementById('hide-controls');
+const blinkButton = document.getElementById('blink');
+const lastButton = document.getElementById('last');
+const skipButton = document.getElementById('skip');
 const backButton = document.getElementById('back');
 const forwardsButton = document.getElementById('forwards');
 const parseButton = document.getElementById('parse');
@@ -26,6 +29,8 @@ let chunkSize = 16;
 let wpm = 500;
 let delay = 325;
 let state = "stopped";
+let backwards = false;
+let fastForwards = false;
 let s = 0;
 let i = 0;
 
@@ -33,23 +38,18 @@ let i = 0;
 
 const Action = {
     start() {
-        if (state != "running" && state != "backwards") {
+        if (state != "running") {
+            Action.output();
             intervalHandle = setInterval(Action.output, delay);
         }
         state = "running";
-        document.getElementById('text-1').style.color="rgba(0, 0, 0, 0.03)";
-        document.getElementById('text-2').style.color="rgba(0, 0, 0, 0.05)";
-        document.getElementById('text-4').style.color="rgba(0, 0, 0, 0.05)";
-        document.getElementById('text-5').style.color="rgba(0, 0, 0, 0.03)";
+        Action.dimText();
     },
 
     pause() {
         clearInterval(intervalHandle);
         state = "paused";
-        document.getElementById('text-1').removeAttribute("style");
-        document.getElementById('text-2').removeAttribute("style");
-        document.getElementById('text-4').removeAttribute("style");
-        document.getElementById('text-5').removeAttribute("style");
+        Action.brightText();
     },
 
     blink() {
@@ -67,31 +67,97 @@ const Action = {
     },
 
     last() {
-        if (s > 0) {
+        if (s > 0 && i == 0) {
+            s -= 2;
+        } else if (s > 0) {
             s--;
             i = 0;
-            Action.start();
+        } else {
+            i = 0;
         }
+        Action.output();
     },
 
     skip() {
-        if (s + 1 < chunkArray.length) {
+        if (s < chunkArray.length - 1) {
             s++;
             i = 0;
-            Action.start();
+            Action.output();
         }
     },
 
     back() {
-        state = "backwards";
-        document.getElementById('text-1').removeAttribute("style");
-        document.getElementById('text-2').removeAttribute("style");
-        document.getElementById('text-4').removeAttribute("style");
-        document.getElementById('text-5').removeAttribute("style");
+        backwards = true;
+        Action.brightText();
+        if (state == "running") {
+            state = "wasRunning";
+            clearInterval(intervalHandle);
+            i--;
+            delay = 50;
+            Action.output();
+            intervalHandle = setInterval(Action.output, delay);
+        } else if (state == "paused") {
+            state = "wasPaused";
+            i--;
+            delay = 50;
+            Action.output();
+            intervalHandle = setInterval(Action.output, delay);
+        } else if (state == "stopped") {
+            state = "wasStopped";
+            s--;
+            i = chunkArray[s].length - 1;
+            delay = 50;
+            Action.output();
+            intervalHandle = setInterval(Action.output, delay);
+        }
+    },
+
+    endBack() {
+        backwards = false;
+        i++;
+        clearInterval(intervalHandle);
+        calcDelay();
+        if (state == "wasRunning") {
+            state = "running"
+            Action.dimText();
+            Action.output();
+            intervalHandle = setInterval(Action.output, delay);
+        } else if (state == "wasPaused") {
+            state = "paused";
+            clearInterval(intervalHandle);
+        } else if (state == "wasStopped") {
+            state = "paused"
+            clearInterval(intervalHandle);
+        }
     },
 
     forwards() {
-        i++;
+        Action.brightText();
+        if (state == "running") {
+            state = "wasRunning";
+            clearInterval(intervalHandle);
+            delay = 50;
+            Action.output();
+            intervalHandle = setInterval(Action.output, delay);
+        } else if (state == "paused") {
+            state = "wasPaused";
+            delay = 50;
+            Action.output();
+            intervalHandle = setInterval(Action.output, delay);
+        }
+    },
+
+    endForwards() {
+        clearInterval(intervalHandle);
+        calcDelay();
+        if (state == "wasRunning") {
+            state = "running";
+            intervalHandle = setInterval(Action.output, delay);
+            Action.dimText();
+        } else if (state == "wasPaused") {
+            state = "paused";
+            clearInterval(intervalHandle);
+        }
     },
 
     toggleStartStop() {
@@ -175,33 +241,51 @@ const Action = {
         s = 0;
         i = 0;
         Action.output();
+        state = "paused";
+    },
+
+    dimText() {
+        document.getElementById('text-1').style.color="rgba(0, 0, 0, 0.03)";
+        document.getElementById('text-2').style.color="rgba(0, 0, 0, 0.05)";
+        document.getElementById('text-4').style.color="rgba(0, 0, 0, 0.05)";
+        document.getElementById('text-5').style.color="rgba(0, 0, 0, 0.03)";
+    },
+
+    brightText() {
+        document.getElementById('text-1').removeAttribute("style");
+        document.getElementById('text-2').removeAttribute("style");
+        document.getElementById('text-4').removeAttribute("style");
+        document.getElementById('text-5').removeAttribute("style");
     },
 
     output() {
         console.log(s + ", " + i);
         console.log(delay + "ms");
         console.log(wpm + "wpm");
-        if (s < chunkArray.length) {
-            if (state == "backwards") {
-                if (i <= 0 && s > 0) {
-                    s--;
-                    i = chunkArray[s].length - 2;
-                } else {
-                    i -= 2;
-                }
-            }
+
+        if (s < chunkArray.length) {                  // if it's not past the end
             display1.textContent = chunkArray[s][i-2];
             display2.textContent = chunkArray[s][i-1];
             display3.textContent = chunkArray[s][i];
             display4.textContent = chunkArray[s][i+1];
             display5.textContent = chunkArray[s][i+2];
-            i++;
-            if (i >= chunkArray[s].length) {
-                s++;
-                i = 0;
+            if (backwards == true) {                  // if it's going backwards
+                if (i <= 0 && s > 0) {                // if it's gone back to the first word of a sentance but not the very first sentence
+                    s--;                              // go back one sentence
+                    i = chunkArray[s].length - 1;     // go to the last word in the sentence
+                } else {                              // if it's going backwards not at the beginning of a sentence
+                    i--;                              // go back one word
+                }
+            } else {                                  // if it's going forwards normally
+                i++;                                  // add one
             }
-        } else {
-            clearInterval(intervalHandle);
+        if (i >= chunkArray[s].length) {              // if it's at the end of a sentence
+            s++;                                      // go to the next sentence
+            i = 0;                                    // go to the beginning of the sentence
+            }
+        } else {                                      // if it is past the end (after increasing s)
+            clearInterval(intervalHandle);            // stop
+            Action.brightText();
             state = "stopped";
             console.log(state);
         }
@@ -211,19 +295,27 @@ const Action = {
         if (textHidden == false && controlsHidden == false) {
             document.getElementById('text-area').style.display=("none");
             document.getElementById('display-area').style.height=("calc(100vh - 150px)");
+            Action.changeFontSize("8vh");
             textHidden = true;
+            document.getElementById('hide-text').innerHTML = "Show Text";
         } else if (textHidden == false && controlsHidden == true) {
             document.getElementById('text-area').style.display=("none");
             document.getElementById('display-area').style.height=("calc(100vh - 50px)");
+            Action.changeFontSize("8vh");
             textHidden = true;
+            document.getElementById('hide-text').innerHTML = "Show Text";
         } else if (textHidden == true && controlsHidden == false) {
             document.getElementById('text-area').removeAttribute("style");
             document.getElementById('display-area').style.height=("calc(60vh - 100px)");
+            Action.changeFontSize("6vh");
             textHidden = false;
+            document.getElementById('hide-text').innerHTML = "Hide Text";
         } else {
             document.getElementById('text-area').removeAttribute("style");
             document.getElementById('display-area').style.height=("calc(60vh)");
+            Action.changeFontSize("6vh");
             textHidden = false;
+            document.getElementById('hide-text').innerHTML = "Hide Text";
         }
     },
 
@@ -232,19 +324,31 @@ const Action = {
             document.getElementById('controls-area').style.display=("none");
             document.getElementById('display-area').style.height=("calc(60vh)");
             controlsHidden = true;
+            document.getElementById('hide-controls').innerHTML = "Show Controls";
         } else if (controlsHidden == false && textHidden == true) {
             document.getElementById('controls-area').style.display=("none");
             document.getElementById('display-area').style.height=("calc(100vh - 50px)");
             controlsHidden = true;
+            document.getElementById('hide-controls').innerHTML = "Show Controls";
         } else if (controlsHidden == true && textHidden == false) {
             document.getElementById('controls-area').removeAttribute("style");
             document.getElementById('display-area').style.height=("calc(60vh - 100px)");
             controlsHidden = false;
+            document.getElementById('hide-controls').innerHTML = "Hide Controls";
         } else {
             document.getElementById('controls-area').removeAttribute("style");
             document.getElementById('display-area').style.height=("calc(100vh - 150px)");
             controlsHidden = false;
+            document.getElementById('hide-controls').innerHTML = "Hide Controls";
         }
+    },
+
+    changeFontSize(h1Size) {
+        document.getElementById('text-1').style.fontSize = h1Size;
+        document.getElementById('text-2').style.fontSize = h1Size;
+        document.getElementById('text-3').style.fontSize = h1Size;
+        document.getElementById('text-4').style.fontSize = h1Size;
+        document.getElementById('text-5').style.fontSize = h1Size;
     }
 }
 
@@ -254,8 +358,8 @@ const keyAction = {
     Control: { keydown: Action.blink, keyup: Action.unblink },
     a: { keydown: Action.last },
     s: { keydown: Action.skip },
-    z: { keydown: Action.back, keyup: Action.start },
-    x: { keydown: Action.forwards },
+    z: { keydown: Action.back, keyup: Action.endBack },
+    x: { keydown: Action.forwards, keyup: Action.endForwards },
     " ": { keydown: Action.toggleStartStop },
     ArrowUp: { keydown: Action.faster },
     ArrowDown: { keydown: Action.slower },
@@ -321,9 +425,14 @@ document.querySelectorAll("button").forEach( function(item) {
 
 hideControlsButton.addEventListener('click', Action.toggleControls);
 hideTextButton.addEventListener('click', Action.toggleText);
+blinkButton.addEventListener('mousedown', Action.blink);
+blinkButton.addEventListener('mouseup', Action.unblink);
+lastButton.addEventListener('click', Action.last);
+skipButton.addEventListener('click', Action.skip);
 backButton.addEventListener('mousedown', Action.back);
-backButton.addEventListener('mouseup', Action.start);
+backButton.addEventListener('mouseup', Action.endBack);
 forwardsButton.addEventListener('mousedown', Action.forwards);
+forwardsButton.addEventListener('mouseup', Action.endForwards);
 parseButton.addEventListener('click', Action.parse);
 startStopButton.addEventListener('click', Action.toggleStartStop);
 fasterButton.addEventListener('click', Action.faster);

@@ -87,10 +87,19 @@ header button {
 
 .display-text {
     flex: 0.875 1 0px;
-    color: rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+#text-1,
+#text-5 {
+    color: rgba(0, 0, 0, 0.3);
+}
+
+#text-2,
+#text-4 {
+    color: rgba(0, 0, 0, 0.5);
 }
 
 #controls-area {
