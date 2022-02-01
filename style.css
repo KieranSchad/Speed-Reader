@@ -6,8 +6,7 @@
 
 html {
     overflow-x: hidden;
-    background: rgb(3,51,94);
-    background: linear-gradient(90deg, rgba(3,51,94,1) 0%, rgba(19,109,114,1) 50%, rgba(3,51,94,1) 100%);
+    background: linear-gradient(90deg, rgba(134,127,110,1) 0%, rgba(186,177,155,1) 50%, rgba(134,127,110,1) 100%)
 }
 
 body{
